@@ -115,9 +115,7 @@ const AuthProvider = ({
         loading
     };
 
-    return <AuthContext.Provider value = {
-        value
-    } > {!loading && children } </AuthContext.Provider>;
+    return <AuthContext.Provider value={value}>{!loading && children}</AuthContext.Provider>;
 };
 
 const useAuth = () => useContext(AuthContext);
@@ -158,11 +156,7 @@ const CartProvider = ({
         clearCart,
         cartTotal
     };
-    return <CartContext.Provider value = {
-        value
-    } > {
-        children
-    } </CartContext.Provider>;
+    return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 };
 const useCart = () => useContext(CartContext);
 
@@ -413,11 +407,7 @@ const ViewProvider = ({
         currentView,
         setCurrentView
     };
-    return <ViewContext.Provider value = {
-        value
-    } > {
-        children
-    } < /ViewContext.Provider>;
+    return <ViewContext.Provider value={value}>{children}</ViewContext.Provider>;
 }
 const useView = () => useContext(ViewContext);
 
@@ -433,24 +423,24 @@ const MainContent = () => {
     if (isAdmin) {
         switch (currentView) {
             case 'admin_dashboard':
-                return < AdminDashboard / > ;
+                return <AdminDashboard />;
             case 'admin_products':
-                return < AdminProducts / > ;
+                return <AdminProducts />;
             default:
-                return < AdminDashboard / > ;
+                return <AdminDashboard />;
         }
     }
 
     switch (currentView) {
         case 'dashboard':
-            return < UserDashboard / > ;
+            return <UserDashboard />;
         case 'products':
-            return < ProductCatalog / > ;
+            return <ProductCatalog />;
         case 'checkout':
-            return < CheckoutPage / > ;
+            return <CheckoutPage />;
             // Otras vistas de usuario aquí
         default:
-            return < UserDashboard / > ;
+            return <UserDashboard />;
     }
 }
 
@@ -460,7 +450,7 @@ const UserDashboard = () => {
     const {
         userData
     } = useAuth();
-    if (!userData) return < LoadingSpinner / > ;
+    if (!userData) return <LoadingSpinner />;
 
     const registrationLink = `https://your-platform.com/register?ref=${userData.referralCode}`;
 
@@ -594,7 +584,7 @@ const ProductCatalog = () => {
         return () => unsubscribe();
     }, []);
 
-    if (loading) return < LoadingSpinner / > ;
+    if (loading) return <LoadingSpinner />;
 
     return ( <
         div >
@@ -643,18 +633,13 @@ const ProductCatalog = () => {
 const CheckoutPage = () => { /* ... El código del Checkout se mantiene similar ... */ return <div > Checkout Page Placeholder < /div>};
 
 // ADMIN COMPONENTS ==============================================================
-const AdminDashboard = () => ( <
-    div >
-    <
-    PageTitle title = "Panel de Administrador" / >
-    <
-    div className = {
-        styles.card
-    } >
-    <
-    p > Bienvenido al panel de control.Usa el menú para gestionar la plataforma. < /p> <
-    /div> <
-    /div>
+const AdminDashboard = () => (
+  <div className="max-w-full overflow-auto">
+    <PageTitle title="Panel de Administrador" />
+    <div className={`${styles.card} max-w-full`}>
+      <p>Bienvenido al panel de control. Usa el menú para gestionar la plataforma.</p>
+    </div>
+  </div>
 );
 
 const AdminProducts = () => {
@@ -1030,46 +1015,29 @@ const RegisterForm = () => {
 
 // MAIN APP COMPONENT =============================================================
 const AppContent = () => {
-    const [sidebarOpen, setSidebarOpen] = useState(false);
-    return ( <
-        ViewProvider >
-        <
-        CartProvider >
-        <
-        div className = "flex h-screen bg-gray-50" >
-        <
-        Sidebar isOpen = {
-            sidebarOpen
-        }
-        setIsOpen = {
-            setSidebarOpen
-        }
-        /> <
-        div className = "flex-1 flex flex-col overflow-hidden" >
-        <
-        Header setSidebarOpen = {
-            setSidebarOpen
-        }
-        /> <
-        main className = "flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6" >
-        <
-        MainContent / >
-        <
-        /main> <
-        /div> <
-        /div> <
-        /CartProvider> <
-        /ViewProvider>
-    );
-}
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  return (
+    <ViewProvider>
+      <CartProvider>
+        <div className="flex h-screen bg-gray-50">
+          <Sidebar isOpen={sidebarOpen} setIsOpen={setSidebarOpen} />
+          <div className="flex-1 flex flex-col overflow-hidden max-w-full">
+            <Header setSidebarOpen={setSidebarOpen} />
+            <main className="flex-1 overflow-x-auto overflow-y-auto bg-gray-100 p-6 max-w-full">
+              <MainContent />
+            </main>
+          </div>
+        </div>
+      </CartProvider>
+    </ViewProvider>
+  );
+};
 
 export default function App() {
-    return ( <
-        AuthProvider >
-        <
-        AppWrapper / >
-        <
-        /AuthProvider>
+    return (
+        <AuthProvider>
+            <AppWrapper />
+        </AuthProvider>
     );
 }
 
@@ -1080,18 +1048,16 @@ const AppWrapper = () => {
     } = useAuth();
 
     if (loading) {
-        return ( <
-            div className = "h-screen w-screen flex items-center justify-center" >
-            <
-            LoadingSpinner / >
-            <
-            /div>
-        );
+    return (
+        <div className="h-screen w-screen flex items-center justify-center">
+            <LoadingSpinner />
+        </div>
+    );
     }
 
     if (!isAuthenticated) {
-        return < AuthPage / > ;
+        return <AuthPage />;
     }
 
-    return < AppContent / > ;
+    return <AppContent />;
 }
